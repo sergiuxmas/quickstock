@@ -127,8 +127,8 @@ Migrations live here:
 - Payments: `payments-service/src/main/resources/db/migration/`
 
 Naming convention:
-- `V1__init_schema.sql`
-- `V2__indexes.sql`
+- `V1__init_core_schema.sql`
+- `V2__add_outbox.sql.sql`
 - `V3__seed_data.sql` (optional)
 
 Flyway runs automatically on startup.

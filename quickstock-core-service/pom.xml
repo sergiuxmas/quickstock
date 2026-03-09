@@ -9,4 +9,11 @@
     <artifactId>quickstock-core-service</artifactId>
     <name>Archetype - quickstock-core-service</name>
     <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>
