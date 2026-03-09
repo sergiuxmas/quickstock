@@ -1,0 +1,48 @@
+# ---- Java ----
+*.class
+*.log
+*.ctxt
+hs_err_pid*
+replay_pid*
+
+# ---- Maven ----
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# Keep Maven wrapper JAR
+!.mvn/wrapper/maven-wrapper.jar
+
+# ---- IntelliJ IDEA ----
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ---- Eclipse ----
+.classpath
+.project
+.settings/
+
+# ---- VS Code ----
+.vscode/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Spring Boot ----
+*.pid
+*.pid.lock
+
+# ---- Env / secrets ----
+.env
+.env.*
+application-local.yml
+application-local.properties
