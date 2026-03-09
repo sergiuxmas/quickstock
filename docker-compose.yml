@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  core-db:
+    image: postgres:16
+    container_name: quickstock-core-db
+    environment:
+      POSTGRES_DB: quickstock_core
+      POSTGRES_USER: quickstock
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5433:5432"
+    volumes:
+      - core_db_data:/var/lib/postgresql/data
+    networks:
+      - quickstock-net
+
+  payments-db:
+    image: postgres:16
+    container_name: quickstock-payments-db
+    environment:
+      POSTGRES_DB: quickstock_payments
+      POSTGRES_USER: quickstock
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5434:5432"
+    volumes:
+      - payments_db_data:/var/lib/postgresql/data
+    networks:
+      - quickstock-net
+
+volumes:
+  core_db_data:
+  payments_db_data:
+
+networks:
+  quickstock-net:
+    driver: bridge
