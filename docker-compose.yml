@@ -14,6 +14,11 @@ services:
       - core_db_data:/var/lib/postgresql/data
     networks:
       - quickstock-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quickstock -d quickstock_core"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   payments-db:
     image: postgres:16
@@ -26,6 +31,41 @@ services:
       - "5434:5432"
     volumes:
       - payments_db_data:/var/lib/postgresql/data
+    networks:
+      - quickstock-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quickstock -d quickstock_payments"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  quickstock-core-service:
+    build:
+      context: .
+      dockerfile: quickstock-core-service/Dockerfile
+    container_name: quickstock-core-service
+    depends_on:
+      core-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8081:8081"
+    networks:
+      - quickstock-net
+
+  payments-service:
+    build:
+      context: .
+      dockerfile: payments-service/Dockerfile
+    container_name: payments-service
+    depends_on:
+      payments-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8082:8082"
     networks:
       - quickstock-net
 
