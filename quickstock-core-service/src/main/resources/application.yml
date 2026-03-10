@@ -1,8 +1,5 @@
 spring:
-  profiles:
-    active: local
   datasource:
-    url: jdbc:postgresql://localhost:5433/quickstock_core
     username: quickstock
     password: secret
   flyway:

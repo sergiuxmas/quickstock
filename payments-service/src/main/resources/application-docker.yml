@@ -7,16 +7,11 @@ logging:
     org.springframework.boot.autoconfigure.flyway: DEBUG
 
 spring:
+  config:
+    activate:
+      on-profile: docker
   datasource:
     url: jdbc:postgresql://payments-db:5432/quickstock_payments
-    username: quickstock
-    password: secret
-  jpa:
-    hibernate:
-      ddl-auto: validate
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
 
 core:
   base-url: http://quickstock-core-service:8081
