@@ -3,8 +3,9 @@ server:
 
 logging:
   level:
-    org.flywaydb: INFO
+    org.flywaydb: DEBUG
     org.springframework.boot.autoconfigure.flyway: DEBUG
+    org.springframework.boot.flyway.autoconfigure: DEBUG
 
 spring:
   config:
@@ -12,6 +13,12 @@ spring:
       on-profile: docker
   datasource:
     url: jdbc:postgresql://payments-db:5432/quickstock_payments
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://payments-db:5432/quickstock_payments
+    user: quickstock
+    password: secret
+    locations: classpath:db/migration
 
 core:
   base-url: http://quickstock-core-service:8081

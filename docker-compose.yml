@@ -49,6 +49,11 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_FLYWAY_ENABLED: "true"
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
+      LOGGING_LEVEL_ORG_FLYWAYDB: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_AUTOCONFIGURE_FLYWAY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_FLYWAY_AUTOCONFIGURE: DEBUG
     ports:
       - "8081:8081"
     networks:
@@ -64,6 +69,11 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_FLYWAY_ENABLED: "true"
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
+      LOGGING_LEVEL_ORG_FLYWAYDB: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_AUTOCONFIGURE_FLYWAY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_FLYWAY_AUTOCONFIGURE: DEBUG
     ports:
       - "8082:8082"
     networks:
