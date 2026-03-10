@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+  core-db:
+    image: postgres:16
+    container_name: quickstock-core-db
+    environment:
+      POSTGRES_DB: quickstock_core
+      POSTGRES_USER: quickstock
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5433:5432"
+    volumes:
+      - core_db_data:/var/lib/postgresql/data
+    networks:
+      - quickstock-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quickstock -d quickstock_core"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  payments-db:
+    image: postgres:16
+    container_name: quickstock-payments-db
+    environment:
+      POSTGRES_DB: quickstock_payments
+      POSTGRES_USER: quickstock
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5434:5432"
+    volumes:
+      - payments_db_data:/var/lib/postgresql/data
+    networks:
+      - quickstock-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quickstock -d quickstock_payments"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  quickstock-core-service:
+    build:
+      context: .
+      dockerfile: quickstock-core-service/Dockerfile
+    container_name: quickstock-core-service
+    depends_on:
+      core-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_FLYWAY_ENABLED: "true"
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
+      LOGGING_LEVEL_ORG_FLYWAYDB: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_AUTOCONFIGURE_FLYWAY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_FLYWAY_AUTOCONFIGURE: DEBUG
+    ports:
+      - "8081:8081"
+    networks:
+      - quickstock-net
+
+  payments-service:
+    build:
+      context: .
+      dockerfile: payments-service/Dockerfile
+    container_name: payments-service
+    depends_on:
+      payments-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_FLYWAY_ENABLED: "true"
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
+      LOGGING_LEVEL_ORG_FLYWAYDB: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_AUTOCONFIGURE_FLYWAY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_FLYWAY_AUTOCONFIGURE: DEBUG
+    ports:
+      - "8082:8082"
+    networks:
+      - quickstock-net
+
+volumes:
+  core_db_data:
+  payments_db_data:
+
+networks:
+  quickstock-net:
+    driver: bridge

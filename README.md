@@ -11,7 +11,7 @@ This repository contains **two Spring Boot applications**:
 ## Tech Stack
 
 - Java **17**
-- Maven (with **Maven Wrapper** `./mvnw`)
+- Maven
 - Spring Boot (latest compatible with Java 17)
 - PostgreSQL (Docker)
 - Flyway (DB migrations)
@@ -127,8 +127,8 @@ Migrations live here:
 - Payments: `payments-service/src/main/resources/db/migration/`
 
 Naming convention:
-- `V1__init_schema.sql`
-- `V2__indexes.sql`
+- `V1__init_core_schema.sql`
+- `V2__add_outbox.sql`
 - `V3__seed_data.sql` (optional)
 
 Flyway runs automatically on startup.
@@ -139,19 +139,19 @@ Flyway runs automatically on startup.
 
 ### Build all modules (from repo root)
 ```bash
-./mvnw clean test
+mvn clean test
 ```
 
 ### Run Core service
 ```bash
 cd quickstock-core-service
-../mvnw spring-boot:run
+../mvn spring-boot:run
 ```
 
 ### Run Payments service (new terminal)
 ```bash
 cd payments-service
-../mvnw spring-boot:run
+../mvn spring-boot:run
 ```
 
 Services:
@@ -189,7 +189,7 @@ docker compose down -v
 ### Run tests only for one service
 ```bash
 cd quickstock-core-service
-../mvnw test
+../mvn test
 ```
 
 ---
