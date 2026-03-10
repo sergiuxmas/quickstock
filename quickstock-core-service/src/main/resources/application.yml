@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+security:
+  jwt:
+    secret: "CHANGE_ME_CHANGE_ME_CHANGE_ME_CHANGE_ME_32+CHARS"
+    issuer: "quickstock-core"
+    access-token-ttl-minutes: 60
