@@ -128,7 +128,7 @@ Migrations live here:
 
 Naming convention:
 - `V1__init_core_schema.sql`
-- `V2__add_outbox.sql.sql`
+- `V2__add_outbox.sql`
 - `V3__seed_data.sql` (optional)
 
 Flyway runs automatically on startup.
