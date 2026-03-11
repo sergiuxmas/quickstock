@@ -10,9 +10,9 @@ This repository contains **two Spring Boot applications**:
 
 ## Tech Stack
 
-- Java **17**
+- Java **21**
 - Maven
-- Spring Boot (latest compatible with Java 17)
+- Spring Boot (latest compatible with Java 21)
 - PostgreSQL (Docker)
 - Flyway (DB migrations)
 
@@ -35,7 +35,7 @@ quickstock/
 
 ## Prerequisites
 
-- **Java 17**
+- **Java 21**
 - Docker + Docker Compose
 - Git
 

@@ -22,6 +22,8 @@
 
     <properties>
         <java.version>17</java.version>
+        <jacoco.version>0.8.14</jacoco.version>
+        <coverage.minimum.line>0.60</coverage.minimum.line>
     </properties>
 
     <dependencies>
