@@ -29,6 +29,7 @@ public class ProductService {
         Specification<Product> spec = (root, query, cb) -> cb.conjunction();
 
         if (active != null) {
+
             spec = spec.and((root, query, cb) -> cb.equal(root.get("active"), active));
         }
         if (sku != null && !sku.isBlank()) {
