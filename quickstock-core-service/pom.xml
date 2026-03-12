@@ -76,6 +76,7 @@
                                 <exclude>**/*Config.class</exclude>
                                 <exclude>**/repository/**</exclude>
                                 <exclude>**/*Repository.class</exclude>
+                                <exclude>**/dto/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -93,6 +94,7 @@
                                 <exclude>**/*Config.class</exclude>
                                 <exclude>**/repository/**</exclude>
                                 <exclude>**/*Repository.class</exclude>
+                                <exclude>**/dto/**</exclude>
                             </excludes>
                             <rules>
                                 <rule>

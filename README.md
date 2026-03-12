@@ -1,4 +1,4 @@
-# QuickStock — Core + Payments (Java 17, Spring Boot, Maven, Postgres, Flyway)
+# QuickStock — Core + Payments (Java 21, Spring Boot, Maven, Postgres, Flyway)
 
 This repository contains **two Spring Boot applications**:
 
