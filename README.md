@@ -1,57 +1,106 @@
-# QuickStock — Core + Payments (Java 21, Spring Boot, Maven, Postgres, Flyway)
+# QuickStock — Core + Payments (Java 21, Spring Boot, Maven, PostgreSQL, Flyway)
 
-This repository contains **two Spring Boot applications**:
+QuickStock is a backend commerce platform split into two Spring Boot services:
 
-- **quickstock-core-service** — Products, Inventory, Orders, Reservations/Expiration
-- **payments-service** — Payments API (idempotent payment attempts + provider simulation)  
-  Communicates with Core via REST callbacks (or can be upgraded to events later).
+- `quickstock-core-service`: products, inventory, orders, reservations, auth
+- `payments-service`: payment intents, status transitions, callback/event delivery
 
----
+The current integration model is callback-based; event-driven evolution is possible via future specs.
+
+## What Spec-Kit Adds Here
+
+Spec-Kit integration in this repository is for **engineering guidance and validation**, not full autonomous code generation.
+
+### Advantages
+
+- Keeps implementation aligned with a single source of truth (`prd.md`)
+- Breaks large changes into controlled steps (`spec -> plan -> tasks`)
+- Improves design quality with explicit trade-offs before coding
+- Reduces regressions by validating implementation against documented scope
+- Makes cross-service changes (`core` + `payments`) easier to track and review
+
+### How/When to Use Spec-Kit
+
+Use Spec-Kit when you:
+
+- introduce a new feature or API contract
+- modify order/payment state behavior or inventory rules
+- change cross-service interaction (callbacks/events/auth)
+- plan non-trivial refactors and want explicit acceptance criteria
+
+Do not use it as a one-shot “generate full production code” tool.
+
+### Typical Workflow
+
+```bash
+# 1) Keep PRD current (main product scope)
+# edit: prd.md
+
+# 2) Create/update feature specification
+speckit.specify
+
+# 3) Generate technical plan
+speckit.plan
+
+# 4) Generate dependency-ordered tasks
+speckit.tasks
+
+# 5) Run consistency analysis
+speckit.analyze
+```
+
+Note: some Speckit flows enforce feature branch naming conventions.
 
 ## Tech Stack
 
-- Java **21**
-- Maven
-- Spring Boot (latest compatible with Java 21)
-- PostgreSQL (Docker)
-- Flyway (DB migrations)
-
----
+- Java 21
+- Maven (multi-module)
+- Spring Boot
+- PostgreSQL 16 (Docker)
+- Flyway migrations
 
 ## Repository Structure
 
-```
+```text
 quickstock/
-├─ docker-compose.yml
-├─ quickstock-core-service/
-│  ├─ pom.xml
-│  └─ src/main/resources/db/migration/...
-└─ payments-service/
-   ├─ pom.xml
-   └─ src/main/resources/db/migration/...
+|- docker-compose.yml
+|- prd.md
+|- quickstock-core-service/
+|  |- pom.xml
+|  `- src/main/resources/db/migration/
+`- payments-service/
+   |- pom.xml
+   `- src/main/resources/db/migration/
 ```
-
----
 
 ## Prerequisites
 
-- **Java 21**
+- Java 21
 - Docker + Docker Compose
-- Git
-
-Optional:
-- IntelliJ IDEA / VS Code
+- Maven
 
 Verify:
+
 ```bash
 java -version
 docker --version
 docker compose version
+mvn -version
 ```
 
----
+## Run Modes and Hostnames
 
-## 1) Start PostgreSQL (persistent)
+Use DB hostnames based on where the app runs:
+
+- App runs locally -> use `localhost:5433` (core DB), `localhost:5434` (payments DB)
+- App runs in Docker Compose -> use `core-db:5432` and `payments-db:5432`
+
+Default API ports:
+
+- Core API: `http://localhost:8081`
+- Payments API: `http://localhost:8082`
+
+## Start Infrastructure
 
 From repo root:
 
@@ -60,162 +109,78 @@ docker compose up -d
 docker ps
 ```
 
-Default ports (example):
-- Core DB: `localhost:5433`
-- Payments DB: `localhost:5434`
+Stop:
 
-> Data is persisted using Docker named volumes.
-
----
-
-## 2) Configure application.yml
-
-Each service has its own config file:
-
-### Core
-`quickstock-core-service/src/main/resources/application.yml`
-
-Example (adjust as needed):
-```yaml
-server:
-  port: 8081
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5433/quickstock_core
-    username: quickstock
-    password: quickstock_pw
-  jpa:
-    hibernate:
-      ddl-auto: validate
-  flyway:
-    enabled: true
-
-payments:
-  base-url: http://localhost:8082
-```
-
-### Payments
-`payments-service/src/main/resources/application.yml`
-
-```yaml
-server:
-  port: 8082
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5434/quickstock_payments
-    username: quickstock
-    password: quickstock_pw
-  jpa:
-    hibernate:
-      ddl-auto: validate
-  flyway:
-    enabled: true
-
-core:
-  base-url: http://localhost:8081
-```
-
----
-
-## 3) Flyway migrations
-
-Migrations live here:
-
-- Core: `quickstock-core-service/src/main/resources/db/migration/`
-- Payments: `payments-service/src/main/resources/db/migration/`
-
-Naming convention:
-- `V1__init_core_schema.sql`
-- `V2__add_outbox.sql`
-- `V3__seed_data.sql` (optional)
-
-Flyway runs automatically on startup.
-
----
-
-## 4) Build & Run
-
-### Build all modules (from repo root)
-```bash
-mvn clean test
-```
-
-### Run Core service
-```bash
-cd quickstock-core-service
-../mvn spring-boot:run
-```
-
-### Run Payments service (new terminal)
-```bash
-cd payments-service
-../mvn spring-boot:run
-```
-
-Services:
-- Core API: `http://localhost:8081`
-- Payments API: `http://localhost:8082`
-
----
-
-## 5) High-Level Flow (Core ↔ Payments)
-
-1. Customer creates order in Core
-2. Customer confirms order → Core reserves inventory (`RESERVED`) and sets `expiresAt`
-3. Customer starts payment → Core calls Payments service with `Idempotency-Key`
-4. Payments responds `PENDING`, later resolves to `SUCCESS` or `FAILED`
-5. Payments notifies Core (callback)
-6. Core finalizes order:
-   - `SUCCESS` → `PAID` and reserved stock is finalized
-   - `FAILED` → reservation is released (order stays `RESERVED` or becomes `CANCELLED` per rules)
-7. Background job expires unpaid reserved orders after 15 minutes → releases inventory
-
----
-
-## 6) Common Commands
-
-### Stop databases
 ```bash
 docker compose down
 ```
 
-### Stop + remove persisted data (CAREFUL)
+Stop and remove persisted DB volumes:
+
 ```bash
 docker compose down -v
 ```
 
-### Run tests only for one service
+## Flyway Migrations
+
+Migration folders:
+
+- Core: `quickstock-core-service/src/main/resources/db/migration/`
+- Payments: `payments-service/src/main/resources/db/migration/`
+
+Rules:
+
+- Flyway runs on startup when enabled
+- Do not edit applied migrations; create a new versioned script instead
+- Keep each migration service-owned (no cross-service schema coupling)
+
+## Build, Test, Run
+
+From repository root:
+
 ```bash
-cd quickstock-core-service
-../mvn test
+mvn clean install
 ```
 
----
+Run core service:
 
-## 7) Git ignore
+```bash
+cd quickstock-core-service
+mvn spring-boot:run
+```
 
-This repo should include `.gitignore` for:
-- `target/`
-- `.idea/`
-- `.vscode/`
-- `.env`
-- local `application-local.yml`
+Run payments service (new terminal):
 
----
+```bash
+cd payments-service
+mvn spring-boot:run
+```
 
-## Next steps (recommended)
+Run tests for one module:
 
-- Add OpenAPI/Swagger for both APIs
-- Add Testcontainers integration tests (Postgres)
-- Add auth between services (API key/JWT)
-- Add outbox pattern + async messaging (optional)
+```bash
+cd quickstock-core-service
+mvn test
+```
 
----
+## High-Level Business Flow
 
-## Troubleshooting
+1. Customer creates and confirms an order in Core
+2. Core reserves inventory and sets reservation expiry
+3. Core starts payment in Payments using idempotency semantics
+4. Payments resolves payment state and notifies Core
+5. Core finalizes order and adjusts reservations accordingly
 
-- **Flyway checksum error**: you edited an existing migration. Create a new migration instead.
-- **Port already in use**: change `server.port` in `application.yml`.
-- **DB connection refused**: ensure `docker compose up -d` is running and ports match.
+## Troubleshooting (Most Common)
+
+- Flyway does not run: verify profile, datasource URL, and `spring.flyway.enabled=true`
+- Schema validation error: DB schema differs from entities; add a new migration to align
+- DB connection refused: check compose health and hostname/port mapping for current run mode
+- JWT signing key/JWK errors: verify JWT secret/key configuration and token encoder setup
+
+## Source References
+
+- Product requirements: `prd.md`
+- Project constitution: `.specify/memory/constitution.md`
+- Core migrations: `quickstock-core-service/src/main/resources/db/migration/`
+- Payments migrations: `payments-service/src/main/resources/db/migration/`
