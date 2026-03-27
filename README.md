@@ -7,6 +7,14 @@ QuickStock is a backend commerce platform split into two Spring Boot services:
 
 The current integration model is callback-based; event-driven evolution is possible via future specs.
 
+## Documentation Precedence
+
+When documentation conflicts, use this precedence order:
+
+1. `docs/revised/` is the authoritative implementation reference.
+2. `docs/api-contracts/` is the source of truth for API contracts.
+3. `docs/architecture/` is draft/legacy context and is non-authoritative.
+
 ## What Spec-Kit Adds Here
 
 Spec-Kit integration in this repository is for **engineering guidance and validation**, not full autonomous code generation.
@@ -182,5 +190,8 @@ mvn test
 
 - Product requirements: `prd.md`
 - Project constitution: `.specify/memory/constitution.md`
+- Authoritative implementation docs: `docs/revised/`
+- API contract source of truth: `docs/api-contracts/`
+- Draft/legacy (non-authoritative) architecture docs: `docs/architecture/`
 - Core migrations: `quickstock-core-service/src/main/resources/db/migration/`
 - Payments migrations: `payments-service/src/main/resources/db/migration/`
