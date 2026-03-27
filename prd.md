@@ -219,7 +219,7 @@ All downstream specs and implementation plans must treat `docs/revised/` as auth
   - `docs/revised/05-project-structure.md`
   - `docs/revised/06-testing-and-quality.md`
   - `docs/revised/07-ci-cd-and-release.md`
-- Documentation precedence rule: `docs/revised/` (authoritative) > `docs/api-contracts/` for contract artifacts > `docs/architecture/` (historical draft reference only).
+- Documentation precedence rule: `docs/revised/` is authoritative for architecture and implementation guidance; `docs/api-contracts/` is authoritative for API contract artifacts; `docs/architecture/` is historical draft reference only.
 - API contracts (source of truth): `docs/api-contracts/`
 - Draft/legacy architecture sources (reference only; non-authoritative):
   - `docs/architecture/QuickStock_Implementation_Spec.docx` (REST surface and workflow expectations)

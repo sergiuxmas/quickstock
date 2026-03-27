@@ -3,8 +3,20 @@
 **Feature Branch**: `[###-feature-name]`  
 **Created**: [DATE]  
 **Status**: Draft  
-**Service Scope**: [core-service | payments-service | both]  
+**Service Scope**: [core | payments | both]  
+**Specification Version**: 1.0.0  
+**Versioning Policy**: Semantic document versioning (MAJOR.MINOR.PATCH)  
 **Input**: User description: "$ARGUMENTS"
+
+## Specification Versioning *(mandatory)*
+
+- This specification starts at version `1.0.0`.
+- Version increments MUST follow semantic document rules:
+  - **MAJOR**: Breaking scope change, removed requirement, or redefined acceptance outcome.
+  - **MINOR**: New non-breaking requirement, scenario, entity, or success criterion.
+  - **PATCH**: Editorial clarification that does not change intended behavior or scope.
+- Every spec update MUST add a changelog entry including version, date, and reason for change.
+- Checklist artifacts MUST record the current spec version being validated.
 
 ## Service Boundary & Contracts *(mandatory)*
 
@@ -100,11 +112,14 @@
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
 - **FR-006**: System MUST preserve service data boundaries and MUST NOT require direct database access from another service
 - **FR-007**: System MUST define behavior for retries and duplicate submissions on state-changing operations
+- **FR-008**: System MUST include `Specification Version` and `Versioning Policy` metadata.
+- **FR-009**: Every spec revision MUST include a changelog entry with version, date, and rationale.
+- **FR-010**: The requirements checklist MUST identify the exact spec version reviewed.
 
 *Example of marking unclear requirements:*
 
-- **FR-008**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-009**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-011**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-012**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 
@@ -138,3 +153,8 @@
 - [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
 - [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
 - [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+
+## Change Log *(mandatory)*
+
+- **1.0.0 ([DATE])**: Initial specification created.
+

@@ -8,15 +8,19 @@
 
 ## Core Service API (MVP)
 
+The current MVP contract baseline is defined in `docs/api-contracts/quickstock-core-service.openapi.yaml`.
+
 ### Authentication
 
-- `POST /auth/register` (optional by rollout scope)
 - `POST /auth/login`
+
+Out of current MVP scope unless explicitly added in a new feature spec:
+
+- `POST /auth/register`
 
 ### Products
 
 - `GET /products` (pagination + filtering)
-- `GET /products/{id}`
 
 Supported list filters:
 
@@ -27,38 +31,38 @@ Supported list filters:
 - `minPrice`
 - `maxPrice`
 
-### Admin Catalog and Inventory
+Out of current MVP contract scope unless explicitly added in a new feature spec and OpenAPI update:
 
+- `GET /products/{id}`
 - `POST /admin/products`
 - `PATCH /admin/products/{id}`
 - `POST /admin/inventory/{productId}/adjust`
-
-### Orders
-
 - `POST /orders`
 - `POST /orders/{orderId}/confirm`
 - `POST /orders/{orderId}/cancel`
 - `GET /orders/{orderId}`
 - `GET /orders`
-
-### Core Payments-Facing Endpoints
-
 - `POST /orders/{orderId}/payments`
 - `GET /orders/{orderId}/payments/{paymentId}`
 - `POST /internal/payments/finalized` (internal callback receiver)
 
 ## Payments Service API (MVP)
 
+The current MVP contract baseline is defined in `docs/api-contracts/payments-service.openapi.yaml`.
+
 - `POST /payments`
 - `GET /payments/{paymentId}`
-- `GET /payments?orderId={id}`
 - `POST /payments/{paymentId}/finalize`
-- `POST /webhooks/provider` (optional for simulation)
 - `GET /health`
+
+Out of current MVP contract scope unless explicitly added in a new feature spec and OpenAPI update:
+
+- `GET /payments?orderId={id}`
+- `POST /webhooks/provider` (optional for simulation)
 
 ## Error Model
 
-All APIs should return a consistent error shape:
+All APIs must return a consistent error shape:
 
 ```json
 {

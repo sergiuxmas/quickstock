@@ -5,10 +5,10 @@ description: "Task list template for feature implementation"
 
 # Tasks: [FEATURE NAME]
 
-**Input**: Design documents from `/docs/specs/[core-service|payments-service]/[###-feature-name]/`
+**Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: Unit and integration tests are REQUIRED by constitution. Contract tests are REQUIRED for API/callback changes.
+**Tests**: Unit tests are required for business-logic changes; integration tests are required for persistence/cross-service changes; contract tests are required for API/callback changes.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -22,8 +22,8 @@ description: "Task list template for feature implementation"
 
 - **Core service**: `quickstock-core-service/src/main/java/` and `quickstock-core-service/src/test/java/`
 - **Payments service**: `payments-service/src/main/java/` and `payments-service/src/test/java/`
-- **Feature docs**: `docs/specs/core-service/[###-feature]/` or `docs/specs/payments-service/[###-feature]/`
-- If a story changes service contracts, include `contracts/openapi.yaml` tasks in the same feature folder
+- **Feature docs**: `specs/[###-feature]/`
+- If a story changes service contracts, include tasks that update `docs/api-contracts/`
 
 <!-- 
   ============================================================================

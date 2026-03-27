@@ -40,20 +40,19 @@ QuickStock MUST operate as two independently deployable services with strict bou
 - `payments-service` owns payment intents, provider simulation, and payment status transitions
 - Each service MUST own its own database schema and Flyway migrations
 - Cross-service direct database access is prohibited; interaction MUST occur through versioned
-  API contracts and authenticated callbacks
+  API contracts and authenticated callbacks or documented events
 
 **Rationale:** The architecture and implementation specs define service separation as the
 primary control against tight coupling and inconsistent data ownership.
 
 ### II. Specification and Contract-First Delivery
 
-All feature work MUST start from documented specifications under `docs/specs/` by service scope:
+All feature work MUST start from documented specifications under `specs/`:
 
-- Core-service features: `docs/specs/core-service/<feature-id>/`
-- Payments-service features: `docs/specs/payments-service/<feature-id>/`
+- Feature folders: `specs/<feature-id>/`
 - Every feature folder MUST include `spec.md`, `plan.md`, and `tasks.md`
-- Any change to external API or callback behavior MUST include `contracts/openapi.yaml`
-  updates in the same feature scope
+- Any change to external API or callback behavior MUST include updates under
+  `docs/api-contracts/` in the same change set
 - `plan.md` MUST identify which service(s) are changed and how contract compatibility is preserved
 
 **Rationale:** QuickStock relies on inter-service contracts (order -> payment request,

@@ -1,6 +1,8 @@
 # Workflows and Integration
 
-## Core Workflow: Confirm Order and Reserve Stock
+This document captures target-state business workflows. Current MVP contract baseline remains the endpoints explicitly defined in `docs/api-contracts/*.openapi.yaml`.
+
+## Core Workflow: Confirm Order and Reserve Stock (target-state)
 
 1. Validate order is in `CREATED` state.
 2. Validate requested quantities against inventory.
@@ -10,7 +12,7 @@
 4. Transition order to `RESERVED`.
 5. Set `reserved_at` and `expires_at` (`reserved_at + 15 min`).
 
-## Payment Success Workflow
+## Payment Success Workflow (target-state)
 
 1. Validate order is `RESERVED` and not expired.
 2. Enforce idempotency for payment finalization.
@@ -18,7 +20,7 @@
 4. Transition order to `PAID`.
 5. Finalize reserved inventory exactly once.
 
-## Payment Failure, Cancel, or Expiry
+## Payment Failure, Cancel, or Expiry (target-state)
 
 All must release reserved stock safely:
 
@@ -27,7 +29,7 @@ All must release reserved stock safely:
   - `reserved_qty -= qty`
   - `available_qty += qty`
 
-## Reservation Expiry Job
+## Reservation Expiry Job (target-state)
 
 - Runs on schedule (for example, every minute).
 - Finds orders in `RESERVED` with `expires_at < now`.
@@ -36,11 +38,11 @@ All must release reserved stock safely:
 
 ## Core <-> Payments Integration
 
-### Synchronous Callback Pattern (Current)
+### Synchronous Callback Pattern (target-state)
 
 - Core creates payment via `POST /payments` on payments service.
 - Payments eventually reaches terminal state.
-- Payments calls back core endpoint with final status.
+- Payments calls back core endpoint with final status when callback endpoints are included in contract scope.
 
 ### Event-Driven Pattern (Evolution)
 

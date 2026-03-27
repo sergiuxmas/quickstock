@@ -27,7 +27,7 @@ This folder contains the markdown-converted, topic-based architecture documentat
 
 ## Governance
 
-- `docs/revised/*` is the preferred architecture reference for engineering discussions.
+- `docs/revised/*` is the authoritative architecture and implementation reference for engineering workflow.
 - `docs/api-contracts/*` remains the source of truth for OpenAPI contracts.
 - Legacy `.docx` files are retained for historical context.
 

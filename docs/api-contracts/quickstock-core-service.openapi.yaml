@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: QuickStock Core Service API
+  version: 1.0.0
+  description: Canonical API contract for quickstock-core-service MVP endpoints.
+servers:
+  - url: http://localhost:8081
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate and return access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+  /products:
+    get:
+      summary: List products with pagination and filtering
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: size
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: active
+          schema: { type: boolean }
+        - in: query
+          name: sku
+          schema: { type: string }
+        - in: query
+          name: name
+          schema: { type: string }
+        - in: query
+          name: currency
+          schema: { type: string, minLength: 3, maxLength: 3 }
+        - in: query
+          name: minPrice
+          schema: { type: number, format: decimal }
+        - in: query
+          name: maxPrice
+          schema: { type: number, format: decimal }
+      responses:
+        '200':
+          description: Product page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page: { type: integer }
+                  size: { type: integer }
+                  totalElements: { type: integer }
+                  totalPages: { type: integer }
+                  items:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [timestamp, status, error, code, message]
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        correlationId:
+          type: string
+
+

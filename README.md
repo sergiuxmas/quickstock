@@ -1,4 +1,4 @@
-# QuickStock — Core + Payments (Java 21, Spring Boot, Maven, PostgreSQL, Flyway)
+# QuickStock — Core + Payments (Java 17, Spring Boot, Maven, PostgreSQL, Flyway)
 
 QuickStock is a backend commerce platform split into two Spring Boot services:
 
@@ -45,23 +45,23 @@ Do not use it as a one-shot “generate full production code” tool.
 # edit: prd.md
 
 # 2) Create/update feature specification
-speckit.specify
+/speckit.specify
 
 # 3) Generate technical plan
-speckit.plan
+/speckit.plan
 
 # 4) Generate dependency-ordered tasks
-speckit.tasks
+/speckit.tasks
 
 # 5) Run consistency analysis
-speckit.analyze
+/speckit.analyze
 ```
 
 Note: some Speckit flows enforce feature branch naming conventions.
 
 ## Tech Stack
 
-- Java 21
+- Java 17
 - Maven (multi-module)
 - Spring Boot
 - PostgreSQL 16 (Docker)
@@ -81,9 +81,15 @@ quickstock/
    `- src/main/resources/db/migration/
 ```
 
+Structure rule:
+
+- No top-level `src/` directory is used for application code.
+- Core application code is in `quickstock-core-service/src/`.
+- Payments application code is in `payments-service/src/`.
+
 ## Prerequisites
 
-- Java 21
+- Java 17
 - Docker + Docker Compose
 - Maven
 
