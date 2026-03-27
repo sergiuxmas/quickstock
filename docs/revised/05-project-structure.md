@@ -12,6 +12,12 @@ Recommended high-level layout:
 - `quickstock-core-service/`
 - `payments-service/`
 
+Repository rule:
+
+- Do not use a top-level `src/` directory for application code.
+- Core service code is stored in `quickstock-core-service/src/`.
+- Payments service code is stored in `payments-service/src/`.
+
 ## Core Service Package Layering
 
 Suggested package responsibilities:

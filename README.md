@@ -81,6 +81,12 @@ quickstock/
    `- src/main/resources/db/migration/
 ```
 
+Structure rule:
+
+- No top-level `src/` directory is used for application code.
+- Core application code is in `quickstock-core-service/src/`.
+- Payments application code is in `payments-service/src/`.
+
 ## Prerequisites
 
 - Java 21
