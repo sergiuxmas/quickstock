@@ -1,12 +1,29 @@
 # Feature Specification: PRD-Aligned Spec-Kit Workflow Boundaries
 
-> Superseded: This feature scope is merged into `specs/002-spec-versioning-policy/spec.md`, which is now the canonical spec for Spec-Kit governance and specification versioning.
-
 **Feature Branch**: `001-spec-kit-guidance-scope`  
 **Created**: 2026-03-27  
-**Status**: Superseded  
+**Status**: Planned  
 **Service Scope**: both  
+**Specification Version**: 1.1.1  
+**Versioning Policy**: Semantic document versioning (MAJOR.MINOR.PATCH)  
 **Input**: User description: "Run the speckit specify workflow using prd.md as source and ensure Spec-Kit is used for context optimization, step-by-step guidance, solution proposals, and code validation, not full autonomous code generation."
+
+## Specification Versioning
+
+- This specification starts at version `1.0.0`.
+- Version increments MUST follow semantic document rules:
+  - **MAJOR**: Breaking scope change, removed requirement, or redefined acceptance outcome.
+  - **MINOR**: New non-breaking requirement, scenario, entity, or success criterion.
+  - **PATCH**: Editorial clarification that does not change intended behavior or scope.
+- Changes that can impact planning, implementation decisions, or governance behavior MUST use MAJOR or MINOR (not PATCH).
+- Every spec update MUST add a changelog entry including version, date, and reason for change.
+- Checklist artifacts MUST record the current spec version being validated.
+
+## Global Applicability
+
+- This is the canonical governance specification for Spec-Kit workflow boundaries and specification versioning.
+- Versioning requirements defined here apply to this feature spec and all newly created feature `spec.md` files.
+- Historical context for prior iterations is captured in this spec changelog.
 
 ## Service Boundary & Contracts *(mandatory)*
 
@@ -16,19 +33,6 @@
 - **Cross-Service Dependency**: Core and Payments planning remains coordinated through contract-first specs. This feature requires both services to consume a shared, PRD-aligned specification process while preserving service boundaries.
 
 ## User Scenarios & Testing *(mandatory)*
-
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
 
 ### User Story 1 - Generate PRD-aligned feature spec (Priority: P1)
 
@@ -84,11 +88,6 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 
 ## Requirements *(mandatory)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
 ### Functional Requirements
 
 - **FR-001**: The specification MUST be derived from `prd.md` and include aligned goals, scope, non-goals, and constraints relevant to the feature.
@@ -101,6 +100,10 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 - **FR-008**: The workflow MUST generate and maintain a checklist artifact that validates spec completeness, testability, scope clarity, assumptions, and planning readiness.
 - **FR-009**: If checklist validation identifies quality gaps, the specification MUST be updated until all required quality checks pass or unresolved issues are explicitly documented.
 - **FR-010**: The final workflow output MUST report the active branch, spec path, checklist status, and readiness for `/speckit.clarify` or `/speckit.plan`.
+- **FR-011**: Every active feature `spec.md` MUST include `Specification Version` and `Versioning Policy` metadata.
+- **FR-012**: Every spec revision MUST include a changelog entry with version, date, and rationale.
+- **FR-013**: The requirements checklist for each feature MUST identify the exact spec version reviewed.
+- **FR-014**: If concurrent edits propose different next versions, the final merged spec MUST recompute and apply the next valid semantic version from the latest changelog.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -110,10 +113,6 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 
 ## Success Criteria *(mandatory)*
 
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
 
 ### Measurable Outcomes
 
@@ -129,3 +128,10 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 - Existing QuickStock MVP service responsibilities remain unchanged; this feature governs specification/process quality rather than runtime behavior changes.
 - Required contract and compatibility governance already exists in repository standards and should be reinforced, not redefined, by this feature.
 - Planning and implementation phases will be performed by developers with review, using Spec-Kit outputs as guidance artifacts rather than autonomous delivery.
+
+## Change Log
+
+- **1.0.0 (2026-03-27)**: Canonical governance spec established with Spec-Kit usage boundaries and semantic versioning policy for all new feature specs.
+- **1.1.0 (2026-03-27)**: Consolidated versioning governance into this single canonical spec and removed cross-spec dependencies; clarified impactful-change version bump rule.
+- **1.1.1 (2026-03-27)**: Removed leftover template guidance comments and kept canonical governance content unchanged.
+

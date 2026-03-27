@@ -2,6 +2,8 @@
 
 ## Testing Strategy
 
+Testing scope must follow the current MVP contract baseline in `docs/api-contracts/`. Additional workflow tests apply when those endpoints are moved in-scope by a feature spec and contract update.
+
 ### Unit Tests
 
 - Service-level tests for inventory reserve/release and payment state transitions.
@@ -29,7 +31,7 @@
 
 ## Definition of Done Highlights
 
-- Core flows operate correctly (`create`, `confirm`, `pay`, `cancel`, `expire`).
+- In-scope contract flows operate correctly for the current release baseline.
 - Idempotency is verified for retries and duplicate notifications.
 - Security is enforced for protected endpoints.
 - Local docker-based run is reproducible.

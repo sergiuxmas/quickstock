@@ -1,10 +1,9 @@
 # Specification Quality Checklist: PRD-Aligned Spec-Kit Workflow Boundaries
 
-> Historical only: this checklist is superseded by `specs/002-spec-versioning-policy/checklists/requirements.md` after feature scope merge.
-
 **Purpose**: Validate specification completeness and quality before proceeding to planning  
 **Created**: 2026-03-27  
-**Feature**: [Link to spec.md](../spec.md)
+**Feature**: [Link to spec.md](../spec.md)  
+**Spec Version Reviewed**: 1.1.1
 
 ## Content Quality
 
@@ -35,5 +34,6 @@
 
 - Validation pass completed on 2026-03-27. No blocking quality issues remain.
 - Spec explicitly constrains Spec-Kit usage to context optimization, guided planning, solution proposals, and code validation, with autonomous end-to-end implementation out of scope.
-- This artifact is retained for traceability; canonical active checklist is under `specs/002-spec-versioning-policy/`.
+- This is the canonical active checklist for governance and versioning policy under `specs/001-spec-kit-guidance-scope/`.
+- Validation update: version 1.1.1 reflects editorial cleanup with canonical governance unchanged.
 

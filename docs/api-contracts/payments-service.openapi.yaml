@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: QuickStock Payments Service API
+  version: 1.0.0
+  description: Canonical API contract for payments-service MVP endpoints.
+servers:
+  - url: http://localhost:8082
+paths:
+  /payments:
+    post:
+      summary: Create payment attempt
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderId, amount, currency]
+              properties:
+                orderId:
+                  type: string
+                  format: uuid
+                amount:
+                  type: number
+                  format: decimal
+                currency:
+                  type: string
+                  minLength: 3
+                  maxLength: 3
+      responses:
+        '201':
+          description: Payment created
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /payments/{paymentId}:
+    get:
+      summary: Get payment by id
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment found
+        '404':
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /payments/{paymentId}/finalize:
+    post:
+      summary: Finalize pending payment (internal simulation)
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Finalized
+        '409':
+          description: Invalid state transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Healthy
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [timestamp, status, error, code, message]
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        correlationId:
+          type: string
+
+
