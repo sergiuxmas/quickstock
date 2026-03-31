@@ -3,7 +3,7 @@
 **Purpose**: Validate specification completeness and quality before proceeding to planning  
 **Created**: 2026-03-27  
 **Feature**: [Link to spec.md](../spec.md)  
-**Spec Version Reviewed**: 1.1.1
+**Spec Version Reviewed**: 1.2.0
 
 ## Content Quality
 
@@ -32,8 +32,8 @@
 
 ## Notes
 
-- Validation pass completed on 2026-03-27. No blocking quality issues remain.
+- Validation pass completed on 2026-03-31. No blocking quality issues remain.
 - Spec explicitly constrains Spec-Kit usage to context optimization, guided planning, solution proposals, and code validation, with autonomous end-to-end implementation out of scope.
 - This is the canonical active checklist for governance and versioning policy under `specs/001-spec-kit-guidance-scope/`.
-- Validation update: version 1.1.1 reflects editorial cleanup with canonical governance unchanged.
+- Validation update: version 1.2.0 adds explicit authoritative domain-source mapping and preserves `docs/architecture/` as historical/non-authoritative.
 

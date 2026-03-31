@@ -46,7 +46,7 @@
 - [ ] T008 [P] [US1] Map PRD goals, scope, constraints, and non-goals to FR coverage entries in `specs/001-spec-kit-guidance-scope/traceability.md`
 - [ ] T009 [US1] Update PRD-aligned scope and constraints language in `specs/001-spec-kit-guidance-scope/spec.md`
 - [ ] T010 [US1] Refine US1 acceptance scenarios for PRD alignment evidence in `specs/001-spec-kit-guidance-scope/spec.md`
-- [ ] T011 [US1] Ensure documentation precedence (`docs/revised/` authoritative) is explicit in `specs/001-spec-kit-guidance-scope/spec.md`
+- [ ] T011 [US1] Ensure documentation precedence is explicit with domain-to-source mapping (`docs/revised/01..07` + `docs/api-contracts/`) and `docs/architecture/` historical-only status in `specs/001-spec-kit-guidance-scope/spec.md`
 - [ ] T012 [US1] Record US1 validation outcome and checklist references in `specs/001-spec-kit-guidance-scope/checklists/requirements.md`
 
 **Checkpoint**: US1 is independently verifiable and plan-ready as MVP.
@@ -114,6 +114,8 @@
 - `FR-012` -> T022
 - `FR-013` -> T006, T024
 - `FR-014` -> T023
+- `FR-015` -> T011, T026
+- `FR-016` -> T011, T026
 
 Cross-cutting governance mapping:
 
@@ -215,4 +217,3 @@ Task T024: Finalize FR-008..FR-014 evidence map in specs/001-spec-kit-guidance-s
 2. Split US1/US2 across contributors once Phase 2 is complete.
 3. Assign US3 to validation lead after first US1/US2 evidence is available.
 4. Close with shared Polish pass for consistency and sign-off.
-
