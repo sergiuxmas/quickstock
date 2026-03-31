@@ -5,7 +5,7 @@
 
 ## Summary
 
-Deliver a governance-only planning package that keeps Spec-Kit usage constrained to guidance and validation, preserves core/payments service boundaries, and standardizes semantic versioning rules for active feature specs. The plan produces research, data model, quickstart, and contract-impact artifacts in the canonical feature folder under `specs/001-spec-kit-guidance-scope/`.
+Deliver a governance-only planning package that keeps Spec-Kit usage constrained to guidance and validation, preserves core/payments service boundaries, standardizes semantic versioning rules for active feature specs, and enforces explicit authoritative source mapping across overview/API/DB/workflows/structure/testing/CI-CD domains.
 
 ## Technical Context
 
@@ -78,18 +78,34 @@ quickstock/
 
 **Structure Decision**: Use the repository's canonical feature layout under `specs/<feature>/`, consistent with Spec-Kit script behavior and constitutional governance.
 
+## Authoritative Source Mapping (Planning Baseline)
+
+| Domain | Authoritative Source |
+| --- | --- |
+| Overview and scope | `docs/revised/01-overview.md` |
+| API behavior | `docs/revised/02-api-specification.md` |
+| Contracts/interfaces | `docs/api-contracts/` |
+| Database design | `docs/revised/03-database-design.md` |
+| Workflows and integration | `docs/revised/04-workflows-and-integration.md` |
+| Project structure | `docs/revised/05-project-structure.md` |
+| Testing and quality | `docs/revised/06-testing-and-quality.md` |
+| CI/CD and release | `docs/revised/07-ci-cd-and-release.md` |
+
+- `docs/architecture/` remains historical and non-authoritative for this feature scope.
+
 ## Phase 0 Research Plan
 
-1. Validate documentation path convention consistency (`specs/...`) against script behavior and constitutional governance.
-2. Resolve version baseline conflict (README Java 21 text vs root Maven Java 17 property) for planning metadata consistency.
-3. Capture best practices for governance-only feature planning (explicit scope boundaries, traceability, and non-functional guardrails).
-4. Capture integration pattern for no-contract-change features (recorded contract impact artifact instead of OpenAPI edits).
+1. Validate explicit domain-to-source mapping against `docs/revised/01..07` and `docs/api-contracts/`.
+2. Validate documentation path convention consistency (`specs/...`) against script behavior and constitutional governance.
+3. Resolve version baseline conflict (README Java 21 text vs root Maven Java 17 property) for planning metadata consistency.
+4. Capture best practices for governance-only feature planning (explicit scope boundaries, traceability, and non-functional guardrails).
+5. Capture integration pattern for no-contract-change features (recorded contract impact artifact instead of OpenAPI edits).
 
 ## Phase 1 Design Plan
 
 1. Model governance artifacts and validation relationships in `data-model.md`.
 2. Create `contracts/README.md` documenting that this feature changes process governance only.
-3. Produce `quickstart.md` with deterministic steps to validate readiness and transition to `/speckit.tasks`.
+3. Produce `quickstart.md` with deterministic source-mapping checks and transition steps to `/speckit.tasks`.
 4. Update Copilot agent context after plan artifacts are finalized.
 
 ## Complexity Tracking

@@ -4,7 +4,7 @@
 **Created**: 2026-03-27  
 **Status**: Planned  
 **Service Scope**: both  
-**Specification Version**: 1.1.1  
+**Specification Version**: 1.2.0  
 **Versioning Policy**: Semantic document versioning (MAJOR.MINOR.PATCH)  
 **Input**: User description: "Run the speckit specify workflow using prd.md as source and ensure Spec-Kit is used for context optimization, step-by-step guidance, solution proposals, and code validation, not full autonomous code generation."
 
@@ -24,6 +24,23 @@
 - This is the canonical governance specification for Spec-Kit workflow boundaries and specification versioning.
 - Versioning requirements defined here apply to this feature spec and all newly created feature `spec.md` files.
 - Historical context for prior iterations is captured in this spec changelog.
+
+## Authoritative Documentation Source Assignment
+
+The following mapping is mandatory for this governance scope and MUST be used when drafting or validating feature artifacts.
+
+| Domain | Authoritative Source |
+| --- | --- |
+| Product/service overview and scope | `docs/revised/01-overview.md` |
+| API behavior and endpoint rules | `docs/revised/02-api-specification.md` |
+| Contract schemas and service interfaces | `docs/api-contracts/` |
+| Database ownership and schema design | `docs/revised/03-database-design.md` |
+| Workflows and service integration behavior | `docs/revised/04-workflows-and-integration.md` |
+| Project/module structure conventions | `docs/revised/05-project-structure.md` |
+| Testing and quality expectations | `docs/revised/06-testing-and-quality.md` |
+| CI/CD and release governance | `docs/revised/07-ci-cd-and-release.md` |
+
+- `docs/architecture/` documents are historical references only and MUST NOT override or replace authoritative sources above.
 
 ## Service Boundary & Contracts *(mandatory)*
 
@@ -45,7 +62,8 @@ As a system integrator/developer, I want the feature specification to be generat
 **Acceptance Scenarios**:
 
 1. **Given** `prd.md` defines QuickStock goals and scope, **When** a specification is produced, **Then** the resulting spec reflects those goals, in-scope boundaries, and non-goals.
-2. **Given** repository documentation precedence rules are defined, **When** the spec is generated, **Then** the spec states `docs/revised/` is authoritative and `docs/architecture/` is historical reference only.
+2. **Given** repository documentation precedence rules are defined, **When** the spec is generated, **Then** the spec includes an explicit domain-to-source mapping for `docs/revised/01..07` and `docs/api-contracts/`.
+3. **Given** older architecture documentation exists, **When** precedence is evaluated, **Then** `docs/architecture/` remains historical non-authoritative reference only.
 
 ---
 
@@ -104,6 +122,8 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 - **FR-012**: Every spec revision MUST include a changelog entry with version, date, and rationale.
 - **FR-013**: The requirements checklist for each feature MUST identify the exact spec version reviewed.
 - **FR-014**: If concurrent edits propose different next versions, the final merged spec MUST recompute and apply the next valid semantic version from the latest changelog.
+- **FR-015**: The specification MUST define an explicit authoritative source mapping for overview, API, contracts, database, workflows, structure, testing, and CI/CD domains using `docs/revised/01..07` and `docs/api-contracts/`.
+- **FR-016**: The specification MUST explicitly mark `docs/architecture/` as historical/non-authoritative and prohibit using it to override mapped authoritative sources.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -127,6 +147,7 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 - `prd.md` is accepted as the primary source input for this feature specification workflow.
 - Existing QuickStock MVP service responsibilities remain unchanged; this feature governs specification/process quality rather than runtime behavior changes.
 - Required contract and compatibility governance already exists in repository standards and should be reinforced, not redefined, by this feature.
+- Domain-specific governance sources in `docs/revised/01..07` and `docs/api-contracts/` remain available and maintained as canonical references.
 - Planning and implementation phases will be performed by developers with review, using Spec-Kit outputs as guidance artifacts rather than autonomous delivery.
 
 ## Change Log
@@ -134,4 +155,5 @@ As a delivery lead, I want a quality checklist attached to the spec so we can co
 - **1.0.0 (2026-03-27)**: Canonical governance spec established with Spec-Kit usage boundaries and semantic versioning policy for all new feature specs.
 - **1.1.0 (2026-03-27)**: Consolidated versioning governance into this single canonical spec and removed cross-spec dependencies; clarified impactful-change version bump rule.
 - **1.1.1 (2026-03-27)**: Removed leftover template guidance comments and kept canonical governance content unchanged.
+- **1.2.0 (2026-03-31)**: Added explicit domain-to-source authority mapping for `docs/revised/01..07` and `docs/api-contracts/`; reaffirmed `docs/architecture/` as historical non-authoritative.
 
