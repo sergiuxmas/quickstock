@@ -2,13 +2,13 @@
 
 ## Contract Governance
 
-- OpenAPI contracts under `docs/api-contracts/` are the source of truth.
+- Service-owned OpenAPI contracts under `quickstock-core-service/src/main/openapi/` and `payments-service/src/main/openapi/` are the source of truth.
 - Implementations in `quickstock-core-service` and `payments-service` must conform to contract schemas, status codes, and security requirements.
 - Additive changes are allowed when backward compatible; breaking changes require explicit versioning and migration notes.
 
 ## Core Service API (MVP)
 
-The current MVP contract baseline is defined in `docs/api-contracts/quickstock-core-service.openapi.yaml`.
+The current MVP contract baseline is defined in `quickstock-core-service/src/main/openapi/openapi.yaml`.
 
 ### Authentication
 
@@ -48,7 +48,7 @@ Out of current MVP contract scope unless explicitly added in a new feature spec 
 
 ## Payments Service API (MVP)
 
-The current MVP contract baseline is defined in `docs/api-contracts/payments-service.openapi.yaml`.
+The current MVP contract baseline is defined in `payments-service/src/main/openapi/openapi.yaml`.
 
 - `POST /payments`
 - `GET /payments/{paymentId}`

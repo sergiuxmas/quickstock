@@ -59,7 +59,7 @@ QuickStock solves this by enforcing reservation-based order flow, idempotent pay
 - Core <-> Payments integration via authenticated callbacks
 - Database-per-service with Flyway migrations
 - Seeded users/products for local development bootstrap
-- Versioned OpenAPI contracts for both services and callback payloads under `docs/api-contracts/`
+- Versioned OpenAPI contracts for both services and callback payloads under `quickstock-core-service/src/main/openapi/` and `payments-service/src/main/openapi/`
 - Backward-compatible API evolution rules for external consumers (including future UI clients)
 - Contract validation in CI for API/callback changes
 - Canonical architecture and implementation source-of-truth documentation is maintained in `docs/revised/`; implementation decisions MUST follow this set when conflicts exist.
@@ -117,12 +117,12 @@ Note: The PRD defines mandatory MVP endpoints and behaviors. Additional endpoint
 
 ### FR-7 API Contract Governance and Compatibility
 
-- Every externally consumed REST endpoint and inter-service callback must be defined in versioned OpenAPI documents under `docs/api-contracts/`
+- Every externally consumed REST endpoint and inter-service callback must be defined in service-owned versioned OpenAPI documents under `quickstock-core-service/src/main/openapi/` and `payments-service/src/main/openapi/`
 - Implementations in `quickstock-core-service` and `payments-service` must conform to their OpenAPI contracts (request/response schema, status codes, auth requirements)
 - Additive, backward-compatible changes are allowed in minor versions; breaking changes require explicit version bump, migration notes, and consumer impact documentation
 - API/callback contract updates must include compatibility tests for current Core consumers and a future UI client integration baseline
 - Error responses must follow a consistent schema across services (error code, message, trace/correlation context where applicable)
-- Every API listed in `docs/revised/02-api-specification.md` must map to a versioned OpenAPI contract in `docs/api-contracts/`
+- Every API listed in `docs/revised/02-api-specification.md` must map to a versioned OpenAPI contract in the owning service module under `src/main/openapi/`
 
 ## 7. Data and Domain Constraints
 
@@ -219,8 +219,8 @@ All downstream specs and implementation plans must treat `docs/revised/` as auth
   - `docs/revised/05-project-structure.md`
   - `docs/revised/06-testing-and-quality.md`
   - `docs/revised/07-ci-cd-and-release.md`
-- Documentation precedence rule: `docs/revised/` is authoritative for architecture and implementation guidance; `docs/api-contracts/` is authoritative for API contract artifacts; `docs/architecture/` is historical draft reference only.
-- API contracts (source of truth): `docs/api-contracts/`
+- Documentation precedence rule: `docs/revised/` is authoritative for architecture and implementation guidance; service-owned OpenAPI contracts under `quickstock-core-service/src/main/openapi/` and `payments-service/src/main/openapi/` are authoritative for API contract artifacts; `docs/architecture/` is historical draft reference only.
+- API contracts (source of truth): `quickstock-core-service/src/main/openapi/openapi.yaml` and `payments-service/src/main/openapi/openapi.yaml`
 - Draft/legacy architecture sources (reference only; non-authoritative):
   - `docs/architecture/QuickStock_Implementation_Spec.docx` (REST surface and workflow expectations)
   - `docs/architecture/QuickStock_Java_Project_Structure.docx` (OpenAPI placement and package-level API concerns)

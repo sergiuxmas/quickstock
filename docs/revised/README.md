@@ -28,6 +28,6 @@ This folder contains the markdown-converted, topic-based architecture documentat
 ## Governance
 
 - `docs/revised/*` is the authoritative architecture and implementation reference for engineering workflow.
-- `docs/api-contracts/*` remains the source of truth for OpenAPI contracts.
+- `quickstock-core-service/src/main/openapi/openapi.yaml` and `payments-service/src/main/openapi/openapi.yaml` are the source of truth for OpenAPI contracts.
 - Legacy `.docx` files are retained for historical context.
 

@@ -23,7 +23,7 @@ description: "Task list template for feature implementation"
 - **Core service**: `quickstock-core-service/src/main/java/` and `quickstock-core-service/src/test/java/`
 - **Payments service**: `payments-service/src/main/java/` and `payments-service/src/test/java/`
 - **Feature docs**: `specs/[###-feature]/`
-- If a story changes service contracts, include tasks that update `docs/api-contracts/`
+- If a story changes service contracts, include tasks that update the owning service OpenAPI file under `src/main/openapi/`
 
 <!-- 
   ============================================================================
