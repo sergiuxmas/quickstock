@@ -62,16 +62,17 @@ specs/001-spec-kit-guidance-scope/
 ```text
 quickstock/
 |- quickstock-core-service/
+|  |- src/main/openapi/
 |  |- src/main/java/
 |  |- src/main/resources/db/migration/
 |  `- src/test/java/
 |- payments-service/
+|  |- src/main/openapi/
 |  |- src/main/java/
 |  |- src/main/resources/db/migration/
 |  `- src/test/java/
 |- docs/
-|  |- revised/
-|  `- api-contracts/
+|  `- revised/
 `- specs/
    `- 001-spec-kit-guidance-scope/
 ```
@@ -84,7 +85,7 @@ quickstock/
 | --- | --- |
 | Overview and scope | `docs/revised/01-overview.md` |
 | API behavior | `docs/revised/02-api-specification.md` |
-| Contracts/interfaces | `docs/api-contracts/` |
+| Contracts/interfaces | `quickstock-core-service/src/main/openapi/openapi.yaml` and `payments-service/src/main/openapi/openapi.yaml` |
 | Database design | `docs/revised/03-database-design.md` |
 | Workflows and integration | `docs/revised/04-workflows-and-integration.md` |
 | Project structure | `docs/revised/05-project-structure.md` |
@@ -95,7 +96,7 @@ quickstock/
 
 ## Phase 0 Research Plan
 
-1. Validate explicit domain-to-source mapping against `docs/revised/01..07` and `docs/api-contracts/`.
+1. Validate explicit domain-to-source mapping against `docs/revised/01..07` and the service-owned OpenAPI files under `src/main/openapi/`.
 2. Validate documentation path convention consistency (`specs/...`) against script behavior and constitutional governance.
 3. Resolve version baseline conflict (README Java 21 text vs root Maven Java 17 property) for planning metadata consistency.
 4. Capture best practices for governance-only feature planning (explicit scope boundaries, traceability, and non-functional guardrails).

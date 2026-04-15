@@ -20,8 +20,9 @@ Sync Impact Report
   - ✅ updated: .specify/templates/spec-template.md
   - ✅ updated: .specify/templates/tasks-template.md
   - ⚠ pending: .specify/templates/commands/*.md (directory not present in repository)
-- Follow-up TODOs:
+  - Follow-up TODOs:
   - None
+  - 2026-04-15: contract source-of-truth paths updated to per-service `src/main/openapi/`
 -->
 
 # QuickStock Commerce Platform (QuickStock) Constitution
@@ -51,8 +52,9 @@ All feature work MUST start from documented specifications under `specs/`:
 
 - Feature folders: `specs/<feature-id>/`
 - Every feature folder MUST include `spec.md`, `plan.md`, and `tasks.md`
-- Any change to external API or callback behavior MUST include updates under
-  `docs/api-contracts/` in the same change set
+- Any change to external API or callback behavior MUST include updates to the owning
+  service OpenAPI contract under `quickstock-core-service/src/main/openapi/` or
+  `payments-service/src/main/openapi/` in the same change set
 - `plan.md` MUST identify which service(s) are changed and how contract compatibility is preserved
 
 **Rationale:** QuickStock relies on inter-service contracts (order -> payment request,
@@ -132,4 +134,4 @@ Current constitutional scope is the backend MVP for small-shop commerce:
 - Compliance review is required in every feature `plan.md` and PR review;
   non-compliance MUST be tracked as explicit follow-up work before release
 
-**Version**: 2.0.0 | **Ratified**: 2026-03-26 | **Last Amended**: 2026-03-26
+**Version**: 2.1.0 | **Ratified**: 2026-03-26 | **Last Amended**: 2026-04-15

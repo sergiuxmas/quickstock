@@ -46,7 +46,7 @@
 - [ ] T008 [P] [US1] Map PRD goals, scope, constraints, and non-goals to FR coverage entries in `specs/001-spec-kit-guidance-scope/traceability.md`
 - [ ] T009 [US1] Update PRD-aligned scope and constraints language in `specs/001-spec-kit-guidance-scope/spec.md`
 - [ ] T010 [US1] Refine US1 acceptance scenarios for PRD alignment evidence in `specs/001-spec-kit-guidance-scope/spec.md`
-- [ ] T011 [US1] Ensure documentation precedence is explicit with domain-to-source mapping (`docs/revised/01..07` + `docs/api-contracts/`) and `docs/architecture/` historical-only status in `specs/001-spec-kit-guidance-scope/spec.md`
+- [ ] T011 [US1] Ensure documentation precedence is explicit with domain-to-source mapping (`docs/revised/01..07` + service-owned `src/main/openapi/` contracts) and `docs/architecture/` historical-only status in `specs/001-spec-kit-guidance-scope/spec.md`
 - [ ] T012 [US1] Record US1 validation outcome and checklist references in `specs/001-spec-kit-guidance-scope/checklists/requirements.md`
 
 **Checkpoint**: US1 is independently verifiable and plan-ready as MVP.

@@ -6,7 +6,6 @@ Recommended high-level layout:
 
 - `pom.xml` (parent)
 - `docker-compose.yml`
-- `docs/api-contracts/`
 - `docs/architecture/` (legacy)
 - `docs/revised/` (canonical markdown set)
 - `quickstock-core-service/`
@@ -17,6 +16,7 @@ Repository rule:
 - Do not use a top-level `src/` directory for application code.
 - Core service code is stored in `quickstock-core-service/src/`.
 - Payments service code is stored in `payments-service/src/`.
+- OpenAPI contracts are service-owned deliverables stored in each module under `src/main/openapi/`.
 
 ## Core Service Package Layering
 

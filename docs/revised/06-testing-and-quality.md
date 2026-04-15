@@ -2,7 +2,7 @@
 
 ## Testing Strategy
 
-Testing scope must follow the current MVP contract baseline in `docs/api-contracts/`. Additional workflow tests apply when those endpoints are moved in-scope by a feature spec and contract update.
+Testing scope must follow the current MVP contract baseline in the service-owned OpenAPI files under `quickstock-core-service/src/main/openapi/` and `payments-service/src/main/openapi/`. Additional workflow tests apply when those endpoints are moved in-scope by a feature spec and contract update.
 
 ### Unit Tests
 

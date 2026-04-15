@@ -1,6 +1,6 @@
 # Workflows and Integration
 
-This document captures target-state business workflows. Current MVP contract baseline remains the endpoints explicitly defined in `docs/api-contracts/*.openapi.yaml`.
+This document captures target-state business workflows. Current MVP contract baseline remains the endpoints explicitly defined in the service-owned OpenAPI files under `quickstock-core-service/src/main/openapi/` and `payments-service/src/main/openapi/`.
 
 ## Core Workflow: Confirm Order and Reserve Stock (target-state)
 
