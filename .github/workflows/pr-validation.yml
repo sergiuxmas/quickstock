@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   validate-pr:
-    name: Build, test, start containers, and validate login
+    name: Build, test, start core containers, and validate login contract
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: '17'
           cache: maven
 
       - name: Build, run tests, and enforce JaCoCo coverage on both modules
@@ -43,37 +43,38 @@ jobs:
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v4
 
-      - name: Start application containers
-        run: docker compose up -d --build
+      - name: Start core application containers
+        run: docker compose up -d --build core-db quickstock-core-service
 
-      - name: Wait for login endpoint and verify token
+      - name: Wait for login endpoint and verify updated auth contract
         shell: bash
         run: |
           set -euo pipefail
 
           LOGIN_URL="http://localhost:8081/auth/login"
-          PAYLOAD='{"username":"admin","password":"admin"}'
+          PAYLOAD='{"email":"admin@quickstock.local","password":"admin"}'
 
           echo "Waiting for application to become ready..."
 
           for i in {1..30}; do
-            response=$(curl -sS -m 10 \
+            http_code=$(curl -sS -m 10 -o response.json -w "%{http_code}" \
               -H "Content-Type: application/json" \
               -d "$PAYLOAD" \
               "$LOGIN_URL" || true)
 
-            if echo "$response" | grep -q "token"; then
-              echo "Health check passed. Response contains token."
+            if [ "$http_code" = "200" ]; then
+              python -c "import json, pathlib; payload = json.loads(pathlib.Path('response.json').read_text()); assert 'accessToken' in payload, 'Response does not contain accessToken'; assert payload['accessToken'], 'accessToken is empty'; assert 'token' not in payload, 'Legacy token field still present'"
+              echo "Login contract check passed. Response contains accessToken."
               exit 0
             fi
 
-            echo "Attempt $i/30: endpoint not ready yet"
+            echo "Attempt $i/30: endpoint not ready yet (HTTP $http_code)"
             sleep 10
           done
 
-          echo "Health check failed. Response did not contain token."
+          echo "Login contract check failed. Response did not contain accessToken."
           echo "Last response:"
-          echo "$response"
+          cat response.json || true
           echo
           echo "Container status:"
           docker compose ps
