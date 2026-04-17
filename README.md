@@ -123,6 +123,7 @@ From repo root:
 ```bash
 docker compose up -d
 docker ps
+docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
 ```
 
 Stop:
