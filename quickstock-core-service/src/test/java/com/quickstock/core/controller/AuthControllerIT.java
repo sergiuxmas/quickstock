@@ -4,6 +4,8 @@ import com.quickstock.core.security.DatabaseUserDetailsService;
 import com.quickstock.core.security.TokenService;
 import com.quickstock.core.service.ProductService;
 import com.quickstock.core.testconfig.MockMvcITConfig;
+import jakarta.servlet.ServletException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,13 +67,23 @@ public class AuthControllerIT {
     }
 
     @Test
-    @DisplayName("POST /auth/login is accessible without bearer token")
-    void postLogin_allowsAnonymousAccess_withoutBearerToken() {
-        // Hint:
-        // 1) SecurityConfig permits /auth/**.
-        // 2) Perform POST /auth/login without Authorization header.
-        // 3) Assert request is not rejected with 401/403 by the security filter chain.
-        // 4) Depending on your mocked collaborators, expect 200 or downstream auth failure instead.
+    @DisplayName("POST /auth/login reaches authentication logic without an Authorization header")
+    void postLogin_withoutAuthorizationHeader_reachesAuthenticationManager() {
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException("invalid credentials"));
+
+        ServletException exception = Assertions.assertThrows(ServletException.class,
+                () -> mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "email@email.com",
+                                  "password": "password"
+                                }
+                                """)));
+
+        Assertions.assertInstanceOf(BadCredentialsException.class, exception.getCause());
+        verify(authenticationManager).authenticate(any());
     }
 
     @Test
