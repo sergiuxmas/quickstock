@@ -166,6 +166,20 @@ cd quickstock-core-service
 mvn spring-boot:run
 ```
 
+Rebuild and update only the dockerized core service:
+
+```bash
+docker compose up -d --build quickstock-core-service
+docker compose ps
+docker logs --tail 100 quickstock-core-service
+```
+
+Rebuild only the core Maven module from repo root:
+
+```bash
+mvn -pl quickstock-core-service -am clean package
+```
+
 Run payments service (new terminal):
 
 ```bash
