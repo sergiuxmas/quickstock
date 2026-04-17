@@ -34,7 +34,7 @@ public class AuthControllerTest {
         LoginRequest request = new LoginRequest("user", "pass");
         LoginResponse response = controller.login(request);
 
-        Assertions.assertEquals("mock-token", response.token());
+        Assertions.assertEquals("mock-token", response.accessToken());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class AuthControllerTest {
 
         Assertions.assertEquals("", auth.getName());
         Assertions.assertEquals("", Objects.requireNonNull(auth.getCredentials()).toString());
-        Assertions.assertEquals("mock-token", response.token());
+        Assertions.assertEquals("mock-token", response.accessToken());
         Mockito.verify(tokenService, Mockito.times(1)).generate(Mockito.same(authenticated));
     }
 }

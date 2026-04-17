@@ -25,7 +25,7 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest req) {
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(req.username(), req.password())
+                new UsernamePasswordAuthenticationToken(req.email(), req.password())
         );
         return new LoginResponse(tokenService.generate(auth));
     }
