@@ -6,7 +6,7 @@ This backlog belongs to feature `001-spec-kit-guidance-scope` and tracks the rem
 
 | ID | Priority | Task | Depends on | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| BL-001 | P1 | Complete login contract alignment and request validation | None | Open | `POST /auth/login` still needs controller-boundary validation and final end-to-end JSON shape verification against the published contract. |
+| BL-001 | P1 | Complete login contract alignment and request validation | None | Done | Controller-boundary validation and end-to-end contract-shape checks are now in place for `POST /auth/login`; runtime and OpenAPI align on `email` request field and `accessToken` response field. |
 | BL-002 | P2 | Add consistent API error handling for `POST /auth/login` | BL-001 recommended | Open | Establish the shared core-service error model first on auth, including malformed input and invalid credentials. |
 | BL-003 | P3 | Add consistent API error handling for `GET /products` | BL-002 recommended | Open | Reuse the same error model for product API behavior and align security/runtime behavior with the contract. |
 | BL-004 | Supporting | Option B — implement real app-level `@RestControllerAdvice` | BL-002, BL-003 | Open | Recommended implementation mechanism for centralized exception-to-response mapping across auth and product APIs. |
@@ -16,22 +16,25 @@ This backlog belongs to feature `001-spec-kit-guidance-scope` and tracks the rem
 ### BL-001 — Complete login contract alignment and request validation
 
 **Source**: Developer audit of `quickstock-core-service` against Scope 1 runtime-impacting expectations  
-**Current status**: Partial
+**Current status**: Done
 
 **Audit summary**
 - **Done**: request field is `email` in `LoginRequest`
 - **Done**: response field is `accessToken` in `LoginResponse`
 - **Done**: authentication lookup remains email-based in `DatabaseUserDetailsService`
-- **Remaining**: add controller-boundary validation for blank/invalid payloads in `AuthController`
-- **Remaining**: update/implement tests so final HTTP JSON request/response shape is asserted end-to-end
+- **Done**: controller-boundary validation is enforced with `@Valid @RequestBody` in `AuthController`
+- **Done**: end-to-end tests verify success payload shape and `400` handling for malformed JSON, blank credentials, and invalid email format
 
 **Concrete implementation steps**
-1. Decide the source of truth: either align runtime to the OpenAPI contract or update the OpenAPI contract to match runtime behavior.
-2. ✅ Runtime request field has been aligned from `username` to `email`.
-3. ✅ Runtime response field has been aligned from `token` to `accessToken`.
-4. ✅ Authentication lookup remains email-based end-to-end.
-5. Add validation at the controller boundary for malformed or blank input (for example via `@Valid @RequestBody`).
-6. Update auth unit/integration tests to assert the final JSON request/response shape.
+1. ✅ Runtime request field aligned to `email` and matches the published OpenAPI contract.
+2. ✅ Runtime response field aligned to `accessToken` and matches the published OpenAPI contract.
+3. ✅ Authentication flow remains email-based end-to-end.
+4. ✅ Added controller-boundary validation with `@Valid @RequestBody` plus DTO constraints (`@Email`, `@NotBlank`).
+5. ✅ Added/updated integration coverage for:
+   - success response JSON shape
+   - malformed JSON -> `400`
+   - blank credentials -> `400`
+   - invalid email format -> `400`
 
 **Main files involved**
 - `quickstock-core-service/src/main/java/com/quickstock/core/controller/AuthController.java`
