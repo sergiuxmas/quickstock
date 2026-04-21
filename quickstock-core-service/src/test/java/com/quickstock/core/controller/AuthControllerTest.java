@@ -76,8 +76,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("forwards blank credentials to authentication manager under current controller contract")
-    void login_forwardsBlankCredentials_withoutControllerValidation() {
+    @DisplayName("forwards blank credentials when controller method is invoked directly without MVC validation")
+    void login_forwardsBlankCredentials_whenInvokedDirectlyWithoutMvcValidation() {
         LoginRequest request = new LoginRequest("", "");
         Authentication authenticated = Mockito.mock(Authentication.class);
         Mockito.when(authenticationManager.authenticate(Mockito.any())).thenReturn(authenticated);

@@ -17,13 +17,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = {
         "spring.autoconfigure.exclude=org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration,org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration,org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration"
@@ -87,48 +88,113 @@ public class AuthControllerIT {
     }
 
     @Test
-    @DisplayName("POST /auth/login returns 401 when credentials are invalid")
-    void postLogin_returns401_whenCredentialsAreInvalid() {
-        // Hint:
-        // 1) Mock AuthenticationManager.authenticate(...) to throw BadCredentialsException.
-        // 2) Perform POST /auth/login with invalid credentials.
-        // 3) Assert the HTTP status produced by your exception handling/security setup (typically 401).
+    @DisplayName("POST /auth/login propagates bad credentials failure when credentials are invalid")
+    void postLogin_propagatesBadCredentialsException_whenCredentialsAreInvalid() {
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException("invalid credentials"));
+
+        ServletException exception = Assertions.assertThrows(ServletException.class,
+                () -> mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "email@email.com",
+                                  "password": "wrong"
+                                }
+                                """)));
+
+        Assertions.assertInstanceOf(BadCredentialsException.class, exception.getCause());
+        verify(authenticationManager).authenticate(any());
     }
 
     @Test
     @DisplayName("POST /auth/login returns token payload in expected JSON shape")
-    void postLogin_returnsTokenPayload_withExpectedJsonShape() {
-        // Hint:
-        // 1) Stub successful authentication and token generation.
-        // 2) Perform POST /auth/login.
-        // 3) Assert response content type is JSON.
-        // 4) Assert the payload contains only/at least the "token" field, matching LoginResponse.
+    void postLogin_returnsTokenPayload_withExpectedJsonShape() throws Exception {
+        when(tokenService.generate(any())).thenReturn("mocked-token");
+        when(authenticationManager.authenticate(any()))
+                .thenReturn(new UsernamePasswordAuthenticationToken("email@email.com", "password"));
+
+        ResultActions result = mockMvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                          "email": "email@email.com",
+                          "password": "password"
+                        }
+                        """)
+        );
+
+        Assertions.assertDoesNotThrow(() -> result.andReturn().getResponse().getContentAsString());
+        result.andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("""
+                        {
+                          "accessToken": "mocked-token"
+                        }
+                        """));
     }
 
     @Test
     @DisplayName("GET /auth/login returns 405 because only POST is supported")
-    void getLogin_returns405_whenMethodNotSupported() {
-        // Hint:
-        // 1) Perform GET /auth/login.
-        // 2) Assert status is 405 Method Not Allowed.
-        // 3) This protects the @PostMapping("/login") contract.
+    void getLogin_returns405_whenMethodNotSupported() throws Exception {
+        mockMvc.perform(get("/auth/login"))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(status().is(405));
     }
 
     @Test
     @DisplayName("POST /auth/login returns 400 when request body is malformed JSON")
-    void postLogin_returns400_whenRequestBodyIsMalformed() {
-        // Hint:
-        // 1) Send invalid JSON in the request body.
-        // 2) Assert deserialization fails before controller logic and returns 400.
+    void postLogin_returns400_whenRequestBodyIsMalformed() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "name@email.com"
+                                  "password": "password"
+                                }
+                                """))
+                .andExpect(status().is(400));
     }
 
     @Test
-    @DisplayName("POST /auth/login documents current behavior for blank credentials")
-    void postLogin_documentsCurrentBehavior_whenCredentialsAreBlank() {
-        // Hint:
-        // 1) LoginRequest fields have @NotBlank, but AuthController.login(...) does not use @Valid.
-        // 2) Send JSON with blank username/password.
-        // 3) Assert the actual current HTTP outcome in your application (likely authentication failure, not validation failure).
-        // 4) Use this test to document current behavior or guide a later @Valid change.
+    @DisplayName("POST /auth/login returns 400 when credentials are blank")
+    void postLogin_returns400_whenCredentialsAreBlank() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "",
+                                  "password": "password"
+                                }
+                                """))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "name@email.com",
+                                  "password": ""
+                                }
+                                """))
+                .andExpect(status().isBadRequest());
+
+        verify(authenticationManager, org.mockito.Mockito.never()).authenticate(any());
+    }
+
+    @Test
+    @DisplayName("POST /auth/login returns 400 when credentials are blank")
+    void postLogin_returns400_whenEmailIsWrong() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "text",
+                                  "password": "password"
+                                }
+                                """))
+                .andExpect(status().isBadRequest());
+
+        verify(authenticationManager, org.mockito.Mockito.never()).authenticate(any());
     }
 }
