@@ -181,4 +181,20 @@ public class AuthControllerIT {
 
         verify(authenticationManager, org.mockito.Mockito.never()).authenticate(any());
     }
+
+    @Test
+    @DisplayName("POST /auth/login returns 400 when credentials are blank")
+    void postLogin_returns400_whenEmailIsWrong() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "text",
+                                  "password": "password"
+                                }
+                                """))
+                .andExpect(status().isBadRequest());
+
+        verify(authenticationManager, org.mockito.Mockito.never()).authenticate(any());
+    }
 }
